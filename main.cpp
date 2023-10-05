@@ -86,9 +86,9 @@ int main() {
   double y2;
   int num1;
   lcd.cls();
-  lcd.printf("Ingresa el numero 1 para determinar el intercepto con el eje y la "
-          "recta entre 2 puntos, el 2 para calcular promedio o el 3 para "
-          "generar colores en led. \n");
+  lcd.printf("Ingresa 1 para intercepto con el eje Y y"
+          "recta entre 2 puntos, 2 para promedio o 3 "
+          " para generar colores en led. \n");
     wait_us(5000000);
 
   num1 = leerOpcion();
@@ -138,11 +138,11 @@ int main() {
     double interceptoY = y1 - (pendiente * x1);
 
     lcd.cls();
-    lcd.printf("La pendiente de la recta que pasa por los dos puntos es: %d",int(pendiente));
+    lcd.printf("La pendiente de la recta es: %d",int(pendiente));
     wait_us(5000000);
 
     lcd.cls();
-    lcd.printf("El intercepto en el eje y es: %d", int(interceptoY ));
+    lcd.printf("El intercepto en Y es: %d", int(interceptoY ));
     wait_us(5000000);
 
   } else if (num1 == 2) {
@@ -175,7 +175,7 @@ int main() {
     
     lcd.cls();
     lcd.printf( "El promedio de las temperaturas es: %d", int(promedio));
-    lcd.printf("La desviación estándar de las temperaturas es: %d", int(desviacionEstandar));
+    lcd.printf("La desviación estándar es: %d", int(desviacionEstandar));
     wait_us(5000000);
 
   } else if (num1 == 3) {
