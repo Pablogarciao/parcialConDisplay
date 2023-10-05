@@ -1,73 +1,77 @@
 SANTIAGO SIERRA Y PABLO GARCÍA
-![](./resources/official_armmbed_example_badge.png)
-# Blinky Mbed OS example
 
-The example project is part of the [Arm Mbed OS Official Examples](https://os.mbed.com/code/) and is the [getting started example for Mbed OS](https://os.mbed.com/docs/mbed-os/latest/quick-start/index.html). It contains an application that repeatedly blinks an LED on supported [Mbed boards](https://os.mbed.com/platforms/).
+Introduccion:
 
-You can build the project with all supported [Mbed OS build tools](https://os.mbed.com/docs/mbed-os/latest/tools/index.html). However, this example project specifically refers to the command-line interface tool [Arm Mbed CLI](https://github.com/ARMmbed/mbed-cli#installing-mbed-cli).
-(Note: To see a rendered example you can import into the Arm Online Compiler, please see our [import quick start](https://os.mbed.com/docs/mbed-os/latest/quick-start/online-with-the-online-compiler.html#importing-the-code).)
+Este proyecto de arquitectura de hardware se basa en el uso de la plataforma mbed para desarrollar una aplicación que involucra una pantalla LCD, un teclado y algunas operaciones matemáticas.
+-Se importan diferentes librerias, entre ellas las librerias de el LCD y el Keypad muy importantes en este proyecto
+```bash
+#include "mbed.h"
+#include <cmath>
+#include <cstdint>
+#include <iostream>
+#include <vector>
+#include <TextLCD.h>
+#include <Keypad.h>
 
-## Mbed OS build tools
+TextLCD lcd(D2,D3,D4,D5,D6,D7,TextLCD::LCD16x2);
+```
+-Se inicializan variable que seran indispensables en el proyecto. tambien se llama a la funcion lcd.cls() la cual funciona para preparar que pantalla LCD se borre y se ponga en blanco, eliminando cualquier texto o gráfico que estuviera previamente presente en la pantalla. Esto es útil, por ejemplo, cuando deseas mostrar información actualizada en la pantalla sin que la información anterior interfiera.
+luegos se utiliza la funcion lcd.printf() para imprimir los textos en el lcd. Se utiliza el wait_us() para que se muestre bien el texto en la pantalla lcd sin ningun bug y por ultimo se llama a la funcion leerOpcion para agarrar el numero presionado en el teclado.
 
-### Mbed CLI 2
-Starting with version 6.5, Mbed OS uses Mbed CLI 2. It uses Ninja as a build system, and CMake to generate the build environment and manage the build process in a compiler-independent manner. If you are working with Mbed OS version prior to 6.5 then check the section [Mbed CLI 1](#mbed-cli-1).
-1. [Install Mbed CLI 2](https://os.mbed.com/docs/mbed-os/latest/build-tools/install-or-upgrade.html).
-1. From the command-line, import the example: `mbed-tools import mbed-os-example-blinky`
-1. Change the current directory to where the project was imported.
+```bash
+  double x1;
+  double y1;
+  double x2;
+  double y2;
+  int num1;
+  lcd.cls();
+  lcd.printf("Ingresa el numero 1 para determinar el intercepto con el eje y la "
+          "recta entre 2 puntos, el 2 para calcular promedio o el 3 para "
+          "generar colores en led. \n");
+    wait_us(5000000);
 
-### Mbed CLI 1
-1. [Install Mbed CLI 1](https://os.mbed.com/docs/mbed-os/latest/quick-start/offline-with-mbed-cli.html).
-1. From the command-line, import the example: `mbed import mbed-os-example-blinky`
-1. Change the current directory to where the project was imported.
+  num1 = leerOpcion();
+```
+-Se verifica si la variable num1 es igual a 1 para determinar si se debe realizar esta sección de código. Luego se limpia la pantalla LCD para asegurarse de que esté en blanco antes de mostrar un nuevo mensaje, despues Imprime en la pantalla LCD el mensaje, luego se pausa la ejecución del programa por un corto tiempo y se almacena en la variable el numero que el usurio dio por medio del tecclado marcial. Por ultimo muestra en el lcd el numero seleccionado y repite este proceso otras 3 veces.
 
-## Application functionality
+```bash
+if (num1 == 1) {
+    lcd.cls();
+    lcd.printf("Ingrese la x1: ");
+    wait_us(5000000);
+    x1 = stod(numeroReal());
 
-The `main()` function is the single thread in the application. It toggles the state of a digital output connected to an LED on the board.
+    lcd.cls();
+    lcd.printf("%d", int(x1));
+    wait_us(5000000);
 
-**Note**: This example requires a target with RTOS support, i.e. one with `rtos` declared in `supported_application_profiles` in `targets/targets.json` in [mbed-os](https://github.com/ARMmbed/mbed-os). For non-RTOS targets (usually with small memory sizes), please use [mbed-os-example-blinky-baremetal](https://github.com/ARMmbed/mbed-os-example-blinky-baremetal) instead.
+    lcd.cls();
+    lcd.printf("Ingrese la y1: ");
+    wait_us(5000000);
 
-## Building and running
+    y1 = stod(numeroReal());
 
-1. Connect a USB cable between the USB port on the board and the host computer.
-1. Run the following command to build the example project and program the microcontroller flash memory:
+    lcd.cls();
+    lcd.printf("%d", int(y1));
+    wait_us(5000000);
 
-    * Mbed CLI 2
+    lcd.cls();
+    lcd.printf("Ingrese la x2: ");
+    wait_us(5000000);
 
-    ```bash
-    $ mbed-tools compile -m <TARGET> -t <TOOLCHAIN> --flash
-    ```
+    x2 = stod(numeroReal());
 
-    * Mbed CLI 1
+    lcd.cls();
+   lcd.printf("%d",int(x2));
+    wait_us(5000000);
 
-    ```bash
-    $ mbed compile -m <TARGET> -t <TOOLCHAIN> --flash
-    ```
+    lcd.cls();
+    lcd.printf("Ingrese la y2: ");
+    wait_us(5000000);
 
-Your PC may take a few minutes to compile your code.
+    y2 = stod(numeroReal());
 
-The binary is located at:
-* **Mbed CLI 2** - `./cmake_build/mbed-os-example-blinky.bin`</br>
-* **Mbed CLI 1** - `./BUILD/<TARGET>/<TOOLCHAIN>/mbed-os-example-blinky.bin`
-
-Alternatively, you can manually copy the binary to the board, which you mount on the host computer over USB.
-
-## Expected output
-The LED on your target turns on and off every 500 milliseconds.
-
-
-## Troubleshooting
-If you have problems, you can review the [documentation](https://os.mbed.com/docs/latest/tutorials/debugging.html) for suggestions on what could be wrong and how to fix it.
-
-## Related Links
-
-* [Mbed OS Stats API](https://os.mbed.com/docs/latest/apis/mbed-statistics.html).
-* [Mbed OS Configuration](https://os.mbed.com/docs/latest/reference/configuration.html).
-* [Mbed OS Serial Communication](https://os.mbed.com/docs/latest/tutorials/serial-communication.html).
-* [Mbed OS bare metal](https://os.mbed.com/docs/mbed-os/latest/reference/mbed-os-bare-metal.html).
-* [Mbed boards](https://os.mbed.com/platforms/).
-
-### License and contributions
-
-The software is provided under Apache-2.0 license. Contributions to this project are accepted under the same license. Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for more info.
-
-This project contains code from other projects. The original license text is included in those source files. They must comply with our license guide.
+    lcd.cls();
+    lcd.printf("%d",int(y2));
+    wait_us(5000000);
+```
