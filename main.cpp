@@ -7,7 +7,6 @@
 #include <Keypad.h>
 
 
-//SOLO FALTA PROBAR
 TextLCD lcd(D2,D3,D4,D5,D6,D7,TextLCD::LCD16x2);
 
 const int numRows = 4;
