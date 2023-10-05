@@ -110,7 +110,7 @@ int main() {
     y1 = stod(numeroReal());
 
     lcd.cls();
-    cout << y1 << endl;
+    lcd.printf("%d", int(y1));
     wait_us(5000000);
 
     lcd.cls();
