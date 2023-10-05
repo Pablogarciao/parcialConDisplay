@@ -2,7 +2,9 @@ SANTIAGO SIERRA Y PABLO GARCÍA
 
 Introduccion:
 
-Este proyecto de arquitectura de hardware se basa en el uso de la plataforma mbed para desarrollar una aplicación que involucra una pantalla LCD, un teclado y algunas operaciones matemáticas.
+Este proyecto de arquitectura de hardware se basa en el uso de la plataforma mbed para desarrollar una aplicación que involucra una pantalla LCD, un teclado y algunas operaciones matemáticas.Se utilizan 2 librerias en especial para el desarrollo de este proyecto, entre ellas la libreria de la pantalla LCD de la cual estaremos usando funciones como .cls(), .printf(), etc. Y la libreria del Keypad de la cual estremos usando metodos como .numeroReal(), .leerOpcion(), etc.
+
+
 -Se importan diferentes librerias, entre ellas las librerias de el LCD y el Keypad muy importantes en este proyecto
 ```bash
 #include "mbed.h"
@@ -74,4 +76,83 @@ if (num1 == 1) {
     lcd.cls();
     lcd.printf("%d",int(y2));
     wait_us(5000000);
+```
+-Se inicializa y asigna un valor a la variable pendiente y la variable intercepto las cuales se definen por su definicion. Luego se limpia el lcd y se imprime la pendiente y luego el intercepto.
+
+```bash
+    double pendiente = (y2 - y1) / (x2 - x1);
+
+    double interceptoY = y1 - (pendiente * x1);
+
+    lcd.cls();
+    lcd.printf("La pendiente de la recta que pasa por los dos puntos es: %d",int(pendiente));
+    wait_us(5000000);
+
+    lcd.cls();
+    lcd.printf("El intercepto en el eje y es: %d", int(interceptoY ));
+    wait_us(5000000);
+```
+-Este fragmento de código es parte de un programa que permite calcular el promedio y la desviación estándar de un conjunto de temperaturas ingresadas por el usuario. Cuando el usuario selecciona la opción "2" en el menú principal, el programa entra en esta sección. El usuario debe ingresar la cantidad de temperaturas (N) que desea analizar. Se crea un vector temperaturas de tamaño N para almacenar las temperaturas ingresadas por el usuario.  Se calcula el promedio de las temperaturas ingresadas sumando todas las temperaturas y dividiendo el resultado por N. Los resultados del promedio y la desviación estándar se muestran en la pantalla LCD para que el usuario los vea.
+
+Se limpia el lcd en cada interacion y se pausa el programa las veces necesarias con la funcion wait_us().
+```bash
+else if (num1 == 2) {
+    int N;
+    lcd.cls();
+    lcd.printf( "Ingrese la cantidad de temperaturas (N): ");
+    wait_us(5000000);
+    N = stoi(numeroReal());
+
+    vector<double> temperaturas(N);
+
+    for (int i = 0; i < N; i++) {
+      lcd.cls();
+      lcd.printf("Ingrese la temperatura %d :",i + 1);
+      wait_us(5000000);
+      temperaturas[i] = stod(numeroReal());
+    }
+
+    double suma = 0;
+    for (int i = 0; i < N; i++) {
+      suma += temperaturas[i];
+    }
+    double promedio = suma / N;
+
+    double sumaCuadrados = 0;
+    for (int i = 0; i < N; i++) {
+      sumaCuadrados += pow(temperaturas[i] - promedio, 2);
+    }
+    double desviacionEstandar = sqrt(sumaCuadrados / N);
+    
+    lcd.cls();
+    lcd.printf( "El promedio de las temperaturas es: %d", int(promedio));
+    lcd.printf("La desviación estándar de las temperaturas es: %d", int(desviacionEstandar));
+    wait_us(5000000);
+
+```
+-Se declaran tres variables de tipo double: r, g y b, que se utilizarán para almacenar los valores de intensidad deseados para los LEDs, Se limpia la pantalla LCD, Se solicita al usuario que ingrese el valor de intensidad deseado para el LED rojo, Se lee la entrada del usuario y se almacena en la variable 'r'. Se repiten los pasos otras 2 veces con los otros leds. Finalmente, se utiliza la función write para establecer la intensidad de cada LED (rojo, verde y azul)
+
+```bash
+} else if (num1 == 3) {
+    PwmOut ledR(LED1);
+    PwmOut ledG(LED2);
+    PwmOut ledB(LED3);
+    double r, g, b;
+    lcd.cls();
+    lcd.printf( "ingresar el valor del led Rojo(de 0 a 255):");
+    wait_us(5000000);
+    r = stod(numeroReal());
+    lcd.cls();
+    lcd.printf("ingresar el valor del led verde(de 0 a 255):");
+    wait_us(5000000);
+    g = stod(numeroReal());
+    lcd.cls();
+    lcd.printf("ingresar el valor del led Rojo(de 0 a 255):");
+    wait_us(5000000);
+    b = stod(numeroReal());
+
+
+    ledR.write(r/255);
+    ledG.write(g/255);
+    ledB.write(b/255);
 ```
