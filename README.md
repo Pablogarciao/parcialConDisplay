@@ -21,6 +21,7 @@ TextLCD lcd(D2,D3,D4,D5,D6,D7,TextLCD::LCD16x2);
 luegos se utiliza la funcion lcd.printf() para imprimir los textos en el lcd. Se utiliza el wait_us() para que se muestre bien el texto en la pantalla lcd sin ningun bug y por ultimo se llama a la funcion leerOpcion para agarrar el numero presionado en el teclado.
 
 ```bash
+int main(){
   double x1;
   double y1;
   double x2;
